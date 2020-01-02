@@ -1,0 +1,2 @@
+function AccurateFloatUtil(){}AccurateFloatUtil.add=function(c,d){var a=c.toString().split("."),e=0;1<a.length&&(e=a[1].length);var a=d.toString().split("."),b=0;1<a.length&&(b=a[1].length);a=Math.pow(10,Math.max(e,b));return(this.mul(c,a)+this.mul(d,a))/a};AccurateFloatUtil.sub=function(c,d){return this.add(c,-d)};
+AccurateFloatUtil.mul=function(c,d){var a=c.toString(),e=d.toString(),b=a.split("."),f=0;1<b.length&&(f+=b[1].length);b=e.split(".");1<b.length&&(f+=b[1].length);return Number(a.replace(".",""))*Number(e.replace(".",""))/Math.pow(10,f)};

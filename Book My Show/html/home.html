@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="import" href="navBar.html">
+    <script>
+        $(document).ready(function () {
+
+            function validateEmail($email) {
+                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                return emailReg.test($email);
+            }
+
+            $("#btnSignUp").click(function () {
+                var mymodal = $('#alertSucc');
+                var SignUpModal = $('#SignUp_popup');
+
+                var txtEmail = $('#signEmail');
+                var txtPwd1 = $('#signPwd1');
+                var txtPwd2 = $('#signPwd2');
+
+                if (txtEmail.val() == null || txtEmail.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter email');
+                }
+                else if (!validateEmail(txtEmail.val())) {
+                    mymodal.find('.modal-body').text('Please enter valid email');
+                }
+
+                else if (txtPwd1.val() == null || txtPwd1.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter password1');
+                }
+                else if (txtPwd2.val() == null || txtPwd2.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter password2');
+                }
+                else if (txtPwd1.val() != txtPwd2.val()) {
+                    mymodal.find('.modal-body').text('Password1 and password2 do not match');
+                }
+                else {
+                    mymodal.find('.modal-body').text('Sign Up successful.');
+                    SignUpModal.modal('hide');
+                }
+                mymodal.modal('show');
+
+            });
+
+            $("#btnLogin").click(function () {
+                var mymodal = $('#alertSucc');
+                var loginModal = $('#Login_popup');
+                var txtEmail = $('#loginEmail');
+                var txtPwd = $('#loginPwd');
+
+                if (txtEmail.val() == null || txtEmail.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter Email');
+                }
+                else if (!validateEmail(txtEmail.val())) {
+                    mymodal.find('.modal-body').text('Please enter valid Email');
+                }
+                else if (txtPwd.val() == null || txtPwd.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter password');
+                }
+                else {
+                    mymodal.find('.modal-body').text('Logged in successfully.');
+                    loginModal.modal('hide');
+                }
+                mymodal.modal('show');
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg" style="background-color:#B80000;">
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="./home.html"><i class="fa fa-home"></i> Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="aboutUs.html">About Us </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./ContactUs.html">Contact Us </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sign Up/login
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Login_popup">Already a
+                            user</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#SignUp_popup">Create account
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    <br>
+
+    <div class="modal fade" id="Login_popup" tabindex="-1" role="dialog" aria-labelledby="Login_popup"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#B80000;">
+                    <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>Login</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+
+                        <label for="loginEmail">Email address</label>
+                        <input type="email" class="form-control" required id="loginEmail" aria-describedby="emailHelp"
+                            placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPwd">Password</label>
+                        <input type="password" class="form-control" required id="loginPwd" placeholder="Password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-danger" id="btnLogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="SignUp_popup" tabindex="-1" role="dialog" aria-labelledby="SignUp_popup"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#B80000;">
+                <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>SignUp</b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" class="form-control" required id="signEmail" aria-describedby="emailHelp"
+                        placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPwd">Password</label>
+                    <input type="password" class="form-control" required id="signPwd1" placeholder="Password">
+                </div>
+                <div class="form-group">
+                        <label for="loginPwd">Confirm Password</label>
+                        <input type="password" class="form-control" required id="signPwd2" placeholder="Password">
+                    </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-danger" id="btnSignUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- The Modal -->
+    <div class="modal" id="alertSucc">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Hello User!!!</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body" id="#txtModal">
+                    Tickets booked Successfully.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="TicketBooking" tabindex="-1" role="dialog" aria-labelledby="TicketBooking"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#B80000;">
+                    <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>Book a Show</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Select <i
+                                class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i></label>&nbsp;
+                        <select name="City" id="City">
+                            <option id="Pune">Pune</option>
+                            <option id="Mumbai">Mumbai</option>
+                            <option id="Delhi">Delhi</option>
+                            <option id="Bangalore">Bangalore</option>
+                            <option id="HyD">hyderabad</option>
+                        </select>
+                        <br>
+                        <br>
+                        <label for="exampleInputEmail1">Select Multiplex</label>&nbsp;
+                        <select name="multiplex" id="multiplex">
+                            <option id="cpk">City Pride Kothrud</option>
+                            <option id="eqr">Esqaure</option>
+                            <option id="pvr">PVR</option>
+                            <option id="inox">Inox</option>
+                            <option id="Rd">R Deccan</option>
+                        </select>
+                        <br>
+                        <br>
+                        <label for="exampleInputEmail1">Select <i class="fa fa-clock-o"
+                                aria-hidden="true"></i></label>&nbsp;
+                        <button class="btn btn-outline-primary mr-1 active" href="#">9:00 am</button>
+                        <button class="btn btn-outline-primary mr-1" href="#">4:00 pm</button>
+                        <button class="btn btn-outline-primary mr-1" href="#">6:30 pm</button>
+                        <button class="btn btn-outline-primary " href="#">8:30 pm</button>
+                        <br>
+                        <br>
+                        <label for="exampleInputPassword1"># of Seats</label>
+                        <input type="number" required id="seatcount" min="1" value="2">
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-danger" data-dismiss="modal" data-toggle="modal"
+                        data-target="#alertSucc">Book Show</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <h2>Latest Movies</h2>
+    <br>
+
+    <div class="card-columns" style="margin-left: 3%;margin-left: 3%">
+        <div class="card">
+            <img class="card-img-top" src="../images/movie_chapaak.jfif" height="350px" alt="Chhappak">
+            <div class="card-body">
+                <h5 class="card-title"> Chhappak <a href="./details_m1.html">More detail</a></h5>
+
+                <p class="card-text"><q>A young woman tries to rebuild her life after a man throws acid in her face on a
+                        public street in New Delhi in 2005.</q></p>
+                <p class="card-text">Release 10 January 2020 (India)
+                    <input type="button" name="Book Now" value="Book Now" class="button" data-toggle="modal"
+                        data-target="#TicketBooking"></p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="../images/movie_Frozen2.jfif" height="350px" alt="Frozen 2">
+            <div class="card-body">
+                <h5 class="card-title">Frozen 2 <a href="./detail_m2.html">More detail</a></h5>
+                <p class="card-text"><q>Elsa the Snow Queen travels to the enchanted forests, dark seas beyond her
+                        kingdom that soon turns into a journey of self-discovery.</q></p>
+                <p class="card-text">Release 22 November 2019 (India)
+                    <input type="button" name="Book Now" value="Book Now" class="button" data-toggle="modal"
+                        data-target="#TicketBooking"></p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="../images/movie_tanhaji.jfif" height="350px" alt="Tanhaji">
+            <div class="card-body">
+                <h5 class="card-title">Tanhaji <a href="./detail_m3.html">More detail</a></h5>
+                <p class="card-text"><q>Taanaji is a historical drama based on Subedar Taanaji Malusare, the military
+                        leader in the army of Chhatrapati Shivaji Maharaj</q></p>
+                <p class="card-text">Release 10 January 2020 (India)
+                    <input type="button" name="Book Now" value="Book Now" class="button" data-toggle="modal"
+                        data-target="#TicketBooking"></p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <h2>Latest Plays</h2>
+    <br>
+    <div class="card-columns" style="margin-left: 3%;margin-left: 3%">
+        <div class="card">
+            <img class="card-img-top" src="../images/play_gelaudat.jfif" height="300px" alt="Gela Udat">
+            <div class="card-body">
+                <h5 class="card-title">Gela Udat <a href="./detail_p1.html">More Details</a></h5>
+                <p class="card-text"><q>Maruti suffers from 'Hero's syndrome'. A well known Don threatens Maruti to
+                        leave town as he does not want his sister to get married to Maruti's younger brother.</q></p>
+                <p class="card-text">In Theaters 10 January 2020
+                    <input type="button" name="Book Now" value="Book Now" class="button" data-toggle="modal"
+                        data-target="#TicketBooking"></p>
+
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="../images/play_sakhar.jfif" height="300px" alt="Sakhar Khallela Manus">
+            <div class="card-body">
+                <h5 class="card-title">Sakhar Khallela Manus <a href="./detail_p2.html">More Details</a></h5>
+                <p class="card-text"><q>Story presents Vilas Deshpande as a manager, who leaves his secured insurance
+                        company job and joins a private insurance company, only for good money.</q></p>
+                <p class="card-text">In Theaters 22 November 2019
+                    <input type="button" name="Book Now" value="Book Now" class="button" data-toggle="modal"
+                        data-target="#TicketBooking"></p>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top" src="../images/play_vaccum.jfif" height="300px" alt="Vaccum Cleaner">
+            <div class="card-body">
+                <h5 class="card-title">Vaccum Cleaner <a href="./detail_p3.html">More Details</a></h5>
+                <p class="card-text"><q>Ranjan & Naina have their own little battles to gain stability & peace. They
+                        constantly take each other granted until an incident makes them to step into each other’s
+                        shoes.</q></p>
+                <p class="card-text">In Theaters 10 January 2020
+                    <input type="button" name="Book Now" value="Book Now" class="button" data-toggle="modal"
+                        data-target="#TicketBooking"></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/aboutUs.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+            $(document).ready(function () {
+    
+                function validateEmail($email) {
+                    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                    return emailReg.test($email);
+                }
+    
+                $("#btnSignUp").click(function () {
+                    var mymodal = $('#alertSucc');
+                    var SignUpModal = $('#SignUp_popup');
+    
+                    var txtEmail = $('#signEmail');
+                    var txtPwd1 = $('#signPwd1');
+                    var txtPwd2 = $('#signPwd2');
+    
+                    if (txtEmail.val() == null || txtEmail.val() == '') {
+                        mymodal.find('.modal-body').text('Please enter email');
+                    }
+                    else if (!validateEmail(txtEmail.val())) {
+                        mymodal.find('.modal-body').text('Please enter valid email');
+                    }
+    
+                    else if (txtPwd1.val() == null || txtPwd1.val() == '') {
+                        mymodal.find('.modal-body').text('Please enter password1');
+                    }
+                    else if (txtPwd2.val() == null || txtPwd2.val() == '') {
+                        mymodal.find('.modal-body').text('Please enter password2');
+                    }
+                    else if (txtPwd1.val() != txtPwd2.val()) {
+                        mymodal.find('.modal-body').text('Password1 and password2 do not match');
+                    }
+                    else {
+                        mymodal.find('.modal-body').text('Sign Up successful.');
+                        SignUpModal.modal('hide');
+                    }
+                    mymodal.modal('show');
+    
+                });
+    
+                $("#btnLogin").click(function () {
+                    var mymodal = $('#alertSucc');
+                    var loginModal = $('#Login_popup');
+                    var txtEmail = $('#loginEmail');
+                    var txtPwd = $('#loginPwd');
+    
+                    if (txtEmail.val() == null || txtEmail.val() == '') {
+                        mymodal.find('.modal-body').text('Please enter Email');
+                    }
+                    else if (!validateEmail(txtEmail.val())) {
+                        mymodal.find('.modal-body').text('Please enter valid Email');
+                    }
+                    else if (txtPwd.val() == null || txtPwd.val() == '') {
+                        mymodal.find('.modal-body').text('Please enter password');
+                    }
+                    else {
+                        mymodal.find('.modal-body').text('Logged in successfully.');
+                        loginModal.modal('hide');
+                    }
+                    mymodal.modal('show');
+                });
+            });
+        </script>
+</head>
+
+<body>
+
+        <nav class="navbar navbar-expand-lg" style="background-color:#B80000;">
+                <a class="navbar-brand" href="#"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="./home.html"><i class="fa fa-home"></i> Home <span
+                                    class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="aboutUs.html">About Us </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./ContactUs.html">Contact Us </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Sign Up/login
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Login_popup">Already a
+                                    user</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#SignUp_popup">Create account
+                                </a>
+                            </div>
+                        </li>
+        
+                    </ul>
+                </div>
+            </nav>
+            <br>
+        
+            <div class="modal fade" id="Login_popup" tabindex="-1" role="dialog" aria-labelledby="Login_popup"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color:#B80000;">
+                            <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>Login</b>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+        
+                                <label for="loginEmail">Email address</label>
+                                <input type="email" class="form-control" required id="loginEmail" aria-describedby="emailHelp"
+                                    placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPwd">Password</label>
+                                <input type="password" class="form-control" required id="loginPwd" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+        
+                            <button type="submit" class="btn btn-danger" id="btnLogin">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="modal fade" id="SignUp_popup" tabindex="-1" role="dialog" aria-labelledby="SignUp_popup"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:#B80000;">
+                        <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>SignUp</b>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+        
+                            <label for="loginEmail">Email address</label>
+                            <input type="email" class="form-control" required id="signEmail" aria-describedby="emailHelp"
+                                placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPwd">Password</label>
+                            <input type="password" class="form-control" required id="signPwd1" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                                <label for="loginPwd">Confirm Password</label>
+                                <input type="password" class="form-control" required id="signPwd2" placeholder="Password">
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+        
+                        <button type="submit" class="btn btn-danger" id="btnSignUp">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+            <!-- The Modal -->
+            <div class="modal" id="alertSucc">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Hello User!!!</h6>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body" id="#txtModal">
+                            Tickets booked Successfully.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <br>
+
+    <div class="w3-container" id="about">
+
+        <div class="w3-content" style="max-width:700px">
+
+            <h3 class="w3-center w3-padding-34"><span class=" w3-wide">
+                    <strong style="color: olive;">Frozen II</strong>
+                </span></h3>
+            <div class="row">
+                <div class="column">
+                    <img src="../images/movie_Frozen2.jfif" alt="Snow" style="width:100%">
+                </div>
+                <div class="column">
+                    <img src="../images/movie_Frozen2_2.jfif" alt="Snow" style="width:100%">
+                </div>
+                <div class="column">
+                    <img src="../images/movie_Frozen2_3.jfif" alt="Snow" style="width:100%">
+                </div>
+            </div>
+
+            <p>Frozen II, also known as Frozen 2, is a 2019 American 3D computer-animated musical fantasy film produced
+                by Walt Disney Animation Studios. The 58th animated film produced by the studio, it is the sequel to the
+                2013 film Frozen and features the return of directors Chris Buck and Jennifer Lee, producer Peter Del
+                Vecho, songwriters Kristen Anderson-Lopez and Robert Lopez, and composer Christophe Beck. Lee also
+                returns as screenwriter, penning the screenplay from a story by her, Buck, Marc E. Smith,
+                Anderson-Lopez, and Lopez,while Byron Howard executive-produced the film. Veteran voice cast
+                Kristen Bell, Idina Menzel, Josh Gad, Jonathan Groff, and Ciarán Hinds return as their previous
+                characters, and they are joined by newcomers Sterling K. Brown, Evan Rachel Wood, Alfred Molina, Martha
+                Plimpton, Jason Ritter, Rachel Matthews, and Jeremy Sisto.</p>
+            <br>
+            <h5 class="w3-center w3-padding-34"><span class="w3-wide"></span><strong style="color: olive;">Book My
+                    Movie HighLights</strong></span>
+            </h5>
+            <table class="table table-dark">
+
+                <tbody>
+                    <tr>
+                        <td>Director</td>
+                        <td>Cheris Buck, Genifer Lee</td>
+                    </tr>
+                    <tr>
+                        <td>Producer</td>
+                        <td>Peter Del Vecho</td>
+                    </tr>
+                    <tr>
+                        <td>Composer</td>
+                        <td>Christophe Beck</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </div>
+</body>
+
+</html>

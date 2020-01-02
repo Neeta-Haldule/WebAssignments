@@ -1,0 +1,1 @@
+function releaseCStepLock(a){var b={};b.formDataId=a;a=new XMLHttpRequest;a.open("POST","/jsup?m\x3dreleaseCStepLock",!1);a.setRequestHeader("Content-Type","text/plain; charset\x3dUTF-8");a.send(stringify(b));switch(a.status){case 200:break;case 500:alert("Save failed, internal server error");break;default:alert("Save failed.  Your session may have expired.")}};

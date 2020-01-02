@@ -1,0 +1,2 @@
+function SFHiddenInput(a,b){this.register();this._name=b;this.setValue(a)}SFHiddenInput.NAME="hiddenField";
+SFHiddenInput.prototype=function(){return juic.set(new juic.Component,{componentName:SFHiddenInput.NAME,setValue:function(a){null==a&&(a="");this._value=a;var b=juic.$(this.id);b&&(b.value=a)},getValue:function(){return this._value},getName:function(){return this._name},renderHtml:function(a){a.push('\x3cinput type\x3d"hidden" ');a.push('name\x3d"',this.getName(),'" ');a.push('id\x3d"',this.id,'" value\x3d"',juic.escapeHTML(this.getValue()),'"/\x3e')}})}();

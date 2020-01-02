@@ -1,0 +1,37 @@
+body, html {
+    height: 100%;
+    font-family: "Inconsolata", sans-serif;
+  }
+  
+  .bgimg {
+    background-position: center;
+    background-size: cover;
+    background-image: url("images/Movie_generic_2.jfif");
+    min-height: 75%;
+  }
+  
+  .menu {
+    display: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+  }
+  
+  /* Clearfix (clear floats) */
+  .row::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+img 
+{
+  border-radius: 50%;
+  height: 250px;
+}

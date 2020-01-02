@@ -1,0 +1,17 @@
+
+/*
+  1. Make Quickcard UI Framework support being able to register new popup actions
+  2. Have PP3 define a new JS file that registers the popup actions
+  3. Update all XHTML and JSP templates in V4 (and PP3, since they currently have their own template) to load the new JS file (do it unconditionally)
+*/
+
+function showPP3Actions (action, userId) {
+    function callback(){
+        showPP3EditDialog(action, userId);
+    }
+    if (window.PPEdit) {
+        callback();
+    } else {
+        SMRF.load(['/ui/peopleprofile/js/actionSearchPopup.js'], callback);
+    }
+}

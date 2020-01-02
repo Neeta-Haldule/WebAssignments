@@ -1,0 +1,370 @@
+// !include /ui/juic/js/core/component-surj.js
+// !include /ui/peopleprofile/js/smrfLazyloader.js
+// !include /ui/peopleprofile/js/smrfloadeControllers.js
+
+// SMRF.load(['/ui/extlib/jquery/jquery.js'])
+// SMRF.load(['/ui/sapui5/main/sap/ui/thirdparty/jqueryui/jquery-ui-position.js'])
+// SMRF.load(['/ui/sapui5/main/sap-ui-core-nojQuery.js'])
+// SMRF.load(['/ui/surj/js/core/surj-ui-core.js'])
+
+
+// MSGS.EMPFILE_HRIS_UPLOAD_TYPES_ARR
+// MSGS.COMMON_NO_SELECTION
+// MSGS.EMPFILE_EDU_ERROR_NO_PERMISSION_TO_SEE_VIEW
+// MSGS.EMPFILE_PP3_ADMIN_PM_CANT_FIND_BLOCK
+// MSGS.ECT_PP3_DateFormat
+// MSGS.EMPFILE_EDU_ERROR_INVALIDINPUT_STARTDATE_AFTER_ENDDATE
+// MSGS.EMPFILE_EDU_ERROR_INVALIDINPUT_MISSING_REQUIRED_VALUE
+// MSGS.ECT_NO_DATA
+// MSGS.EMPFILE_EDU_ERROR_INVALIDINPUT_MAX_LENGTH_EXCEEDED
+// MSGS.COMMON_Error
+// MSGS.EMPFILE_EDU_ERROR_INVALIDINPUT_FORMAT_ERROR
+// MSGS.EMPFILE_SCORECARD_Duplicate_Tag
+
+var ui5Loaded = false;
+
+window._sPeopleprofileUrlPrefix = /^(\/[^\/]+\/[^\/]+\/[^\/]+\/).*$/.exec(RESOURCES['/ui/peopleprofile/resources/root.txt'])[1]; //ui/peopleprofile/resources_xxx
+window._sSfPeopleprofileUrlPrefix = /^(\/[^\/]+\/[^\/]+\/[^\/]+\/).*$/.exec(RESOURCES['/ui/peopleprofile/resources/sap/sf/peopleprofile/root.txt'])[1]; //ui/peopleprofile/resources_1.yyy
+window._sPersonAndEmpUrlPrefix = /^(\/[^\/]+\/[^\/]+\/[^\/]+\/).*$/.exec(RESOURCES['/ui/peopleprofile/resources/sap/personandemp/uilib/root.txt'])[1];
+window._sExtentUilibUrlPrefix = /^(\/[^\/]+\/[^\/]+\/[^\/]+\/).*$/.exec(RESOURCES['/ui/peopleprofile/resources/sap/extent/uilib/root.txt'])[1]; //ui/peopleprofile/resources_1.zzz
+
+window.company = Util.findURLParam("bplte_company");
+
+var themingModElement = document.getElementById("ui5-theming-mod"); //if ui5-theming-mod meta tag is not built, then we consider theming is disabled.
+var themingModContent = themingModElement && themingModElement.content;
+if(themingModContent){
+	var sThemingMod = themingModContent.replace(/\W/g, ".");
+	var sfPeopleprofileResourcePath = sThemingMod + window._sSfPeopleprofileUrlPrefix + "theming_aux!" + window._sSfPeopleprofileUrlPrefix;
+	var themeLibs = {
+		"sap.sf.peopleprofile": function () {
+			return this.themeCssBaseMergeUrl + sfPeopleprofileResourcePath;
+		}
+	};
+}
+
+if (window["sap-ui-config"]) {
+	ui5Loaded = true;
+	if(window["sap-ui-config"].themeroots && window["sap-ui-config"].themeroots[window["sap-ui-config"].theme] && themeLibs){
+		surj_convert_dynamic_configs(themeLibs);
+		window["sap-ui-config"].themeroots[window["sap-ui-config"].theme]["sap.sf.peopleprofile"] = themeLibs["sap.sf.peopleprofile"];
+		sap.ui.getCore().setThemeRoot(window["sap-ui-config"].theme, ["sap.sf.peopleprofile"], themeLibs["sap.sf.peopleprofile"])
+	}
+}else {
+	window["sap-ui-config"] = {
+		libs: "sap.m, sap.ui.layout, sap.extent.uilib, sap.ui.unified, sap.ui.commons",
+		bindingSyntax: "complex",
+		preload: "async",
+		skipUI5ThemingPath: true,
+		resourceroots: {
+			"sap.extent.uilib": window._sExtentUilibUrlPrefix + "sap/extent/uilib",
+			"sap.personandemp.uilib": window._sPersonAndEmpUrlPrefix + "sap/personandemp/uilib",
+			"sap.sf.peopleprofile": window._sSfPeopleprofileUrlPrefix + 'sap/sf/peopleprofile'
+		},
+		surj: {
+			dynamicConfigs: ["resourceRoots", "themeRoots"]
+		}
+	};
+	if(themeLibs){
+		var themeMeta = document.getElementById('sap-ui-config.theme');
+		var themeMetaContent = "sap_bluecrystal"	//default
+		if (themeMeta) {
+			themeMetaContent = themeMeta.getAttribute('content');
+		}
+		window["sap-ui-config"].themeRoots = {};
+		window["sap-ui-config"].themeRoots[themeMetaContent] = themeLibs;
+	}
+}
+
+function PP3EditDialog() {};
+
+PP3EditDialog.openDialog = function(userInfo, blockId) {
+	var loading = new SFLoading(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("COMMON_loading"), "#FFF");
+	SFOverlayMgr.showOverlay(loading, true);
+	SMRF.load(['/ui/extlib/jquery/jquery.js','/ui/surj/js/core/surj-ui-config.js'], function(){
+	SMRF.load(["/ui/sapui5/main/sap/ui/thirdparty/jqueryui/jquery-ui-position.js", "/ui/sapui5/main/sap-ui-core-nojQuery.js",
+               "/ui/surj/js/core/surj-ui-core.js"],function(){
+   	        if (ui5Loaded){
+   	            jQuery.sap.registerModulePath('sap.extent.uilib', window._sExtentUilibUrlPrefix + 'sap/extent/uilib');
+   	            jQuery.sap.registerModulePath('sap.sf.peopleprofile', window._sSfPeopleprofileUrlPrefix + 'sap/sf/peopleprofile');
+   	            jQuery.sap.registerModulePath('sap.personandemp.uilib', window._sPersonAndEmpUrlPrefix + "sap/personandemp/uilib");
+   	            jQuery.sap.registerModulePath('Application', window._sSfPeopleprofileUrlPrefix + 'sap/sf/peopleprofile/Application');
+   	        }
+   	
+   	        var modulePath = jQuery.sap.getModulePath("sap.sf.peopleprofile");
+   	        jQuery.sap.require("sap.extent.uilib.FormPattern");
+   	        jQuery.sap.require("sap.m.MessageBox");
+   	        sap.ui.getCore().includeLibraryTheme("sap.sf.peopleprofile");
+
+   	        var oBizXResourceModel = new sap.sf.surj.core.BizXResourceModel();
+
+   	     	var viewMappingModel = new sap.ui.model.json.JSONModel();
+   	     	viewMappingModel.loadData(modulePath + "/configurations/BlockViewMappings.json", null, false);
+   	     	viewMappingModel.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
+   	     	sap.ui.getCore().setModel(viewMappingModel, "blockMappings");
+   	        
+   	        var oLayoutModel = new sap.ui.model.json.JSONModel(modulePath + "/configurations/LayoutConfig.json");
+   	        sap.ui.getCore().setModel(oLayoutModel, "layoutConfig");
+   	        loadRequiredControllers();
+   	        
+   	        //EDU-8408 go to selected user profile page
+	   	    sap.ui.getCore().getEventBus().subscribe("peopleProfile", "selectUserFromCard", jQuery.proxy(function (channel, event, oData) {
+	   	        if (oData) {
+	   	        	var url = '/sf/liveprofile?selected_user=' + encodeURIComponent(oData.userID) + '&_s.crb=' + window.ajaxSecKey;
+	   	        	window.setLocation(url);
+	   	        }
+	   	    }, this));	   	    
+	   	    var pageHeaderJsonData = typeof window.pageHeaderJsonData == undefined ? window.opener && window.opener.pageHeaderJsonData : window.pageHeaderJsonData;//to fix EDU-8863:pageHeaderJsonData not available in popup window.
+   	        var userId = userInfo ? userInfo.userId : pageHeaderJsonData.userInfo.id; // if userInfo.userId is not available, use logged in user id.
+
+				sap.ui.getCore().setModel(new sap.ui.model.resource.ResourceModel({bundle: sap.ui.getCore().getLibraryResourceBundle("sap.sf.peopleprofile.i18n")}), "i18n");
+   	            sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel({
+   	                userId : userId,
+   	                username : userId,
+   	                userFullName : userInfo.fullname,
+   	                loggedInUser: pageHeaderJsonData.userInfo.id,
+   	                hasData : false,
+   	                company : window.company,
+   	                ownView : true,
+   	                publicLinkVisible : false,
+   	                publicView: false,
+   	                effectiveDate: new Date()
+   	            }), "user");
+   	            sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel({
+   	                isPhone: sap.ui.Device.system.phone,
+   	                isNotPhone: !sap.ui.Device.system.phone
+   	            }), "device");
+
+				jQuery.sap.require("sap.sf.peopleprofile.model.pp3core.DWRModel");
+				jQuery.sap.require("sap.sf.peopleprofile.util.pp3core.SFAPIHelper");
+				var oDWRModel = new sap.sf.peopleprofile.model.pp3core.DWRModel(userId, sap.sf.peopleprofile.util.pp3core.SFAPIHelper
+					.formatDateForCalendar(new Date()));
+				sap.ui.getCore().setModel(oDWRModel, "dwrModel");
+
+   	         var getBlockDeferred = new jQuery.Deferred();
+   	         var me = this;
+   	         var actionReqObj = function(oDeferred){
+   	        	 return {
+   	        		 callback:function (blockInfo) {
+   	        			 SFOverlayMgr.removeOverlay(loading.id);
+   	        			 var data = JSON.parse(blockInfo);   	        			 
+   	        			 if(data == null){
+   	        				sap.m.MessageBox.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("EMPFILE_EDU_ERROR_NO_PERMISSION_TO_SEE_VIEW"), {
+   	        					icon: sap.m.MessageBox.Icon.ERROR
+   	        				});
+   	        			 }else if(data.status == "fail"){
+   	        				sap.m.MessageBox.show(sap.ui.getCore().getModel("i18n").getResourceBundle().getText("EMPFILE_PP3_ADMIN_PM_CANT_FIND_BLOCK"), {
+   	        					icon: sap.m.MessageBox.Icon.ERROR
+   	        				});   	        				
+   	        			 }else{
+							 var editDialog = PP3EditDialog.showViewModeBlockDialog(data);
+							 if(editDialog){
+								 PP3EditDialog.handleDialogEvents(editDialog);
+							 }
+						 }
+   	        			 
+   	        		  },
+   	        		  exceptionHandler:jQuery.proxy(function (expObj) {   	        			 
+   	        			  oDeferred.reject(expObj);
+	   	                }, this)
+   	        	 };
+   	         };
+   	         smrfLazyLoader.getControllerInstance('employeeProfilePageConfigController', 'employeeprofilepoc','getBlockConfig',[blockId, userId, actionReqObj(getBlockDeferred)]);
+   	        
+   	    })
+	});
+};
+
+PP3EditDialog.showViewModeBlockDialog = function(oBlockInfo){
+	oBlockInfo.blockName = sap.ui.getCore().getModel("blockMappings").getData()[oBlockInfo.blockType].viewName;
+	jQuery.sap.require(oBlockInfo.blockName);
+	oClass = jQuery.sap.getObject(oBlockInfo.blockName);
+	oBlock = new oClass();
+	
+	//apply model mapping if defined in metadata
+	if (oBlockInfo.modelMapping) {
+		oBlock.addMapping(new sap.uxap.ModelMapping(oBlockInfo.modelMapping));
+		if(oBlockInfo.modelMapping.params && typeof oBlock.setBackendParams === "function"){
+			oBlock.setBackendParams(oBlockInfo.modelMapping.params);
+		}
+	}
+	
+	if(oBlockInfo.blockId){
+		oBlock.blockId = oBlockInfo.blockId;
+	}
+	
+	if(oBlockInfo.blockType && typeof oBlock.setBlockType === "function"){
+		oBlock.setBlockType(oBlockInfo.blockType);
+	}
+	if (oBlockInfo.largeBlock && typeof oBlock.setLargeBlock === "function") {
+        oBlock.setLargeBlock(oBlockInfo.largeBlock);
+    }
+
+    if (oBlockInfo.blockTitle && typeof oBlock.setBlockTitle === "function") {
+        oBlock.setBlockTitle(oBlockInfo.blockTitle);
+    }
+	if(oBlockInfo.blockDescription && typeof oBlock.setBlockDescription  === "function"){
+		oBlock.setBlockDescription(oBlockInfo.blockDescription);
+	}
+	if (oBlockInfo.titleField && typeof oBlock.setTitleField === "function") {
+		oBlock.setTitleField(oBlockInfo.titleField);
+	}
+
+	if (oBlockInfo.layoutViewType && typeof oBlock.setBlockLayoutViewType === "function") {
+		oBlock.setBlockLayoutViewType(oBlockInfo.layoutViewType);
+	}
+
+	if (oBlockInfo.showSubSectionMore) {
+		oBlock.setShowSubSectionMore(true);
+	}
+	
+	if (!oBlock.getMode()) {
+		oBlock.setMode("Expanded");
+	}
+	oBlock.setModel(sap.ui.getCore().getModel("dwrModel"), "dwrModel");
+	oBlock.connectToModels();
+	var viewBlockDialog = new sap.m.Dialog({
+		title: oBlockInfo.blockTitle,
+		contentWidth:oBlockInfo.largeBlock ? "71%" : "35%",
+		contentHeight:"71%",
+		horizontalScrolling:false,
+		content:oBlock,
+		endButton:new sap.m.Button({
+			text:sap.ui.getCore().getModel("i18n").getResourceBundle().getText("COMMON_Close"),
+			press:function(event) {
+				viewBlockDialog.close();
+	        }
+		})
+ 	}).addStyleClass('PMFormPP3Container');
+	PP3EditDialog.subscribeEventBusCommonEvents();
+    viewBlockDialog.open();
+    return viewBlockDialog;
+};
+
+PP3EditDialog.handleDialogEvents = function (editDialog) {
+
+    editDialog.afterOpen = function () {        
+        window.scrollTo(0,0);
+    };
+};
+
+PP3EditDialog.subscribeEventBusCommonEvents = function(){	
+	jQuery.sap.require("sap.sf.peopleprofile.view.pp3core.history.HistoryDialog");	
+    sap.ui.getCore().getEventBus().subscribe('sap.sf.peopleprofile', 'HistoryDialog', function (sChannelId, sEventId, data) {
+        var historyDialog = new sap.sf.peopleprofile.view.pp3core.history.HistoryDialog(data.blockId, data.userId, data.label,
+        		data.isMDF, data.screenId, data.rowId, data.internalId, data.objectType, data.backendParams, data.isForInvalidFO, data.invalidFOType);
+    }, this);
+	
+};
+
+function showPP3EditPopup(blockInfo, userInfo) {	
+    PP3EditDialog.openDialog(userInfo, blockInfo.blockId);
+	window.scrollTo(0,0);
+}
+
+/*******
+ * ******
+ * ******
+ * ******
+ * ******
+ * ************
+ * ******************
+ * TEMP FIX WILL UPDATE AND TREVISIT IN THE 1602 release.
+ * ******************
+ * ************
+ * ******
+ * ******
+ *
+ */
+if(!window.smrfLazyLoader){
+	window.smrfLazyLoader = (function () {
+	    var loadingControllers = {};
+	    var pendingAjaxCall={};
+	    var pendingEmployeecardCallBack = [];
+	    return juic.set({}, {
+	        _mBeanInstances : {},
+	        getControllerInstance : function(controller, module,method, ajaxrespObj) {
+	            var me = this;
+	            module = module ? module : 'v4';
+
+				var testLoadedController = !this._mBeanInstances[controller] && AjaxService.getMBeanInstance(controller);
+				if(testLoadedController){
+					this._mBeanInstances[controller] = testLoadedController;
+				}
+
+	            if(!this._mBeanInstances[controller] && loadingControllers[controller]){
+	                if(!pendingAjaxCall[controller]){
+	                    pendingAjaxCall[controller]=[];
+	                }
+	                pendingAjaxCall[controller].push({"method":method,"ajaxrespObj":ajaxrespObj});
+	            }
+
+	            if (!this._mBeanInstances[controller]) {
+	                loadingControllers[controller]=true;
+	                SMRF["load"](['ajaxservice:'+ module + '.'+controller],function(){
+	                    loadingControllers[controller]=false;
+	                    me._mBeanInstances[controller] = AjaxService.getMBeanInstance(controller);
+	                    if(!me._mBeanInstances[controller]){
+	                        console.log("ERROR: no service")
+	                    }
+	                    if(method && ajaxrespObj){
+	                        me._mBeanInstances[controller][method].apply(window, ajaxrespObj);
+	                    }else{
+	                        return me._mBeanInstances[controller];
+	                    }
+	                    if(pendingAjaxCall[controller]){
+	                        var pendingControllers = pendingAjaxCall[controller];
+	                        for(var i=0;i<pendingControllers.length;i++){
+	                            var controll=pendingControllers[i];
+	                            me._mBeanInstances[controller][controll.method].apply(window, controll.ajaxrespObj);
+	                        }
+	                    }
+	                })
+	            }else{
+	                if(method && ajaxrespObj){
+	                    this._mBeanInstances[controller][method].apply(window, ajaxrespObj);
+	                }else{
+	                    return this._mBeanInstances[controller];
+	                }
+	            }
+	        },
+	        showPeoplePickerAndUserPhoto: function(fCallback, fContext){
+	            pendingEmployeecardCallBack.push({callback:fCallback, context:fContext})
+	            SMRF.load(['/ui/sfgrp/js/surjControls.js'],function(){
+	                for(var i = pendingEmployeecardCallBack.length -1;i >= 0 ; i--){
+	                    var oCallBack = pendingEmployeecardCallBack[i]
+	                    oCallBack.callback.apply(oCallBack.context)
+	                }
+	                pendingEmployeecardCallBack = [];
+	            });
+	        }
+	    })
+	})();
+	}
+
+
+
+function DUMMYfUNCTIONdOnOTcALL(){
+    SMRF.load(['ajaxservice:edu.BadgesController', 'ajaxservice:edu.notesController', 'ajaxservice:edu.TagsController', 'ajaxservice:v4.objectiveRatingController']);
+    SMRF.load(['ajaxservice:edu.backgroundController', 'ajaxservice:edu.ratingController', 'ajaxservice:v4.PerformanceHistoryController', 'ajaxservice:sm.successorController', 'ajaxservice:sm.talentPoolController']);
+    SMRF.load(['ajaxservice:edu.peopleNavigationController', 'ajaxservice:nomination.pullNominationController', 'ajaxservice:sm.currentNominationsController', 'ajaxservice:sm.matrixPlacementController']);
+    SMRF.load(['ajaxservice:edu.positionPortletController', 'ajaxservice:v4.competencyPortletController', 'ajaxservice:v4.compBehaviorController', 'ajaxservice:v4.learningHistoryController']);
+    SMRF.load(['ajaxservice:calibration.calHistoryPortletController', 'ajaxservice:sm.employeeOverviewController']);
+    SMRF.load(['ajaxservice:hris.quickcardController', 'ajaxservice:cdp.devGoalPP3Controller', 'ajaxservice:edu.empFilesHistoryController', 'ajaxservice:gm.goalPP3Controller', 'ajaxservice:edu.customExtensionPP3Controller']);
+    SMRF.load(['ajaxservice:absence.tlmPeopleProfile3Controller','ajaxservice:attendance.tlmTimeSheetController','ajaxservice:edu.EDUPercentCompleteController', 'ajaxservice:edu.pictureUploadController', 'ajaxservice:edu.publicProfileExpressiveLibraryController', 'ajaxservice:edu.publicProfileController', 'ajaxservice:edu.employeeInfoController','ajaxservice:payroll.payrollController']);
+    SMRF.load(['ajaxservice:employeeprofilepoc.employeeProfilePageConfigController','ajaxservice:jdmng.skillProfileMgmtController','ajaxservice:cdp.transcriptController']);
+    SMRF.load(['ajaxservice:hris.mssEmploymentInfoController', 'ajaxservice:hris.essController', 'ajaxservice:hris.essMssActionController','ajaxservice:positionmanagement.positionOrgChartController']);
+    SMRF.load(['ajaxservice:employeeprofilepoc.employeeInfoForPP3Controller','ajaxservice:employeeprofilepoc.linkedInIntegrationController', 'ajaxservice:benefitsmanagement.ectBenefitUIController','ajaxservice:benefitsmanagement.benefitsEmployeeOverviewController']);
+    SMRF.load(['ajaxservice:hris.hrisHistoryController', 'ajaxservice:hris.hrisAttachmentController', 'ajaxservice:hris.lazyDataGridController', 'ajaxservice:v4.picklistController', 'ajaxservice:hris.mssEmploymentInfoController', 'ajaxservice:hris.EssMssGlobalAssignmentNavigationController', 'ajaxservice:hris.NationalIdFormatRetrieverController', 'ajaxservice:hris.ecHelpController','ajaxservice:employeecentral.EDUIJHPortletController','ajaxservice:absence.tlmTimeOffController']);
+    SMRF.load(['ajaxservice:fo.customFieldAsGOAutoCompleteController','ajaxservice:genericobject.customAutoCompleteFieldController','ajaxservice:workstructure.migratedObjectAutoCompleteController','ajaxservice:fo.countrySpecificValueController','ajaxservice:fo.foundationAutoCompleteController','ajaxservice:fo.foAutoCompleteController','ajaxservice:fo.positionAutoCompleteController','ajaxservice:fo.positionMSSAutoCompleteController','ajaxservice:fo.positionHireAutoCompleteController','ajaxservice:genericobject.genericObjectAutoCompleteController']);
+    SMRF.load(['ajaxservice:genericobject.genericObjectController','ajaxservice:genericobject.genericObjectListController','ajaxservice:genericobject.configUIController']);
+    SMRF.load(['ajaxservice:documentgeneration.essMssFormsGenerationController','ajaxservice:documentgeneration.documentGenerationPP3Controller']);
+    SMRF.load(['ajaxservice:jdmng.jobProfileListController','ajaxservice:jdmng.jobProfileMgmtController','ajaxservice:jdmng.skillProfileMgmtController']);
+    SMRF.load(['/ui/orgchart/js/readinessColorConstant.js']);
+}
+
+function loadRequiredControllers(){
+    SMRF.load(['ajaxservice:fo.countrySpecificValueController','ajaxservice:fo.foundationAutoCompleteController','ajaxservice:fo.foAutoCompleteController','ajaxservice:fo.positionAutoCompleteController','ajaxservice:fo.positionMSSAutoCompleteController','ajaxservice:fo.positionHireAutoCompleteController']);
+    SMRF.load(['ajaxservice:genericobject.genericObjectController','ajaxservice:genericobject.genericObjectListController','ajaxservice:genericobject.genericObjectAutoCompleteController']);
+    SMRF.load(['ajaxservice:genericobject.configUIController','ajaxservice:fo.customFieldAsGOAutoCompleteController','ajaxservice:genericobject.customAutoCompleteFieldController','ajaxservice:workstructure.migratedObjectAutoCompleteController']);
+	SMRF.load(['ajaxservice:hris.mssEmploymentInfoController']);
+}

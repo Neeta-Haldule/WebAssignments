@@ -1,0 +1,29 @@
+nav a
+{
+    color: #FFFCFB;
+}
+
+nav a:hover{
+    text-overflow: ellipsis;
+    color: black;
+}
+
+h2
+{
+    overflow: hidden;
+  padding: 20px 10px;
+    color: #B80000;
+    text-shadow: 0 0 3px gray;
+}
+
+.modal-body input
+{
+    background-color:#EEE9E9;
+}
+
+.button
+{
+    background-color: #B80000;
+    color: white;
+    box-shadow: gray;
+}

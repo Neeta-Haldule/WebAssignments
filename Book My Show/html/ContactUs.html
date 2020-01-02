@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Contact US</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <script>
+    $(document).ready(function () {
+
+      function validateEmail($email) {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailReg.test($email);
+      }
+
+      $("#btnSignUp").click(function () {
+                var mymodal = $('#alertSucc');
+                var SignUpModal = $('#SignUp_popup');
+
+                var txtEmail = $('#signEmail');
+                var txtPwd1 = $('#signPwd1');
+                var txtPwd2 = $('#signPwd2');
+
+                if (txtEmail.val() == null || txtEmail.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter email');
+                }
+                else if (!validateEmail(txtEmail.val())) {
+                    mymodal.find('.modal-body').text('Please enter valid email');
+                }
+
+                else if (txtPwd1.val() == null || txtPwd1.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter password1');
+                }
+                else if (txtPwd2.val() == null || txtPwd2.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter password2');
+                }
+                else if (txtPwd1.val() != txtPwd2.val()) {
+                    mymodal.find('.modal-body').text('Password1 and password2 do not match');
+                }
+                else {
+                    mymodal.find('.modal-body').text('Sign Up successful.');
+                    SignUpModal.modal('hide');
+                }
+                mymodal.modal('show');
+
+            });
+
+            $("#btnLogin").click(function () {
+                var mymodal = $('#alertSucc');
+                var loginModal = $('#Login_popup');
+                var txtEmail = $('#loginEmail');
+                var txtPwd = $('#loginPwd');
+
+                if (txtEmail.val() == null || txtEmail.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter Email');
+                }
+                else if (!validateEmail(txtEmail.val())) {
+                    mymodal.find('.modal-body').text('Please enter valid Email');
+                }
+                else if (txtPwd.val() == null || txtPwd.val() == '') {
+                    mymodal.find('.modal-body').text('Please enter password');
+                }
+                else {
+                    mymodal.find('.modal-body').text('Logged in successfully.');
+                    loginModal.modal('hide');
+                }
+                mymodal.modal('show');
+            });
+       
+
+      $("#btnSubmit").click(function () {
+        var mymodal = $('#alertModal');
+        var txtName = $('#name');
+        var txtEmail = $('#email');
+        var txtMsg = $('#msg');
+        if (txtName.val() == null || txtName.val() == "") {
+          mymodal.find('.modal-body').text('Please enter Name');
+        }
+        else if (txtEmail.val() == null || txtEmail.val() == '') {
+          mymodal.find('.modal-body').text('Please enter Email');
+        }
+        else  if (!validateEmail(txtEmail.val())) {
+            mymodal.find('.modal-body').text('Please enter valid Email');
+          }
+        else if (txtMsg.val() == null || txtMsg.val() == '') {
+          mymodal.find('.modal-body').text('Please enter Message');
+        }
+        else {
+            mymodal.find('.modal-body').text('Mail sent successfully. We will get back to you soon !!!');
+        }
+        mymodal.modal('show');
+      });
+    });
+  </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color:#B80000;">
+        <a class="navbar-brand" href="#"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="./home.html"><i class="fa fa-home"></i> Home <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="aboutUs.html">About Us </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./ContactUs.html">Contact Us </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Sign Up/login
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Login_popup">Already a
+                            user</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#SignUp_popup">Create account
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    <br>
+
+    <div class="modal fade" id="Login_popup" tabindex="-1" role="dialog" aria-labelledby="Login_popup"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#B80000;">
+                    <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>Login</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+
+                        <label for="loginEmail">Email address</label>
+                        <input type="email" class="form-control" required id="loginEmail" aria-describedby="emailHelp"
+                            placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPwd">Password</label>
+                        <input type="password" class="form-control" required id="loginPwd" placeholder="Password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="submit" class="btn btn-danger" id="btnLogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="SignUp_popup" tabindex="-1" role="dialog" aria-labelledby="SignUp_popup"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#B80000;">
+                <h5 class="modal-title" id="LginForm" style="color: whitesmoke;"><b>SignUp</b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+
+                    <label for="loginEmail">Email address</label>
+                    <input type="email" class="form-control" required id="signEmail" aria-describedby="emailHelp"
+                        placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPwd">Password</label>
+                    <input type="password" class="form-control" required id="signPwd1" placeholder="Password">
+                </div>
+                <div class="form-group">
+                        <label for="loginPwd">Confirm Password</label>
+                        <input type="password" class="form-control" required id="signPwd2" placeholder="Password">
+                    </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-danger" id="btnSignUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- The Modal -->
+    <div class="modal" id="alertSucc">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Hello User!!!</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body" id="#txtModal">
+                    Tickets booked Successfully.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  <br>
+
+  <div class="w3-content w3-container w3-padding-30" style="background-color: #f2f2f2;" id="contact">
+    <h3 class="w3-center" style="color: maroon;"><strong><i> We'd love to hear from you !!!
+        </i></strong></h3>
+    <div class="w3-row w3-padding-32 w3-section">
+      <div class="w3-col m4 w3-container">
+        <img src="../images/bms-address" class="w3-image w3-round" style="width:100%">
+      </div>
+      <div class="w3-col m8 w3-panel" style="color: #bf8040;">
+        <div class="w3-large w3-margin-bottom">
+          <i class="fa fa-map-marker fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Maharashtra, India<br>
+          <i class="fa fa-phone fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Phone: +91 9658745896<br>
+          <i class="fa fa-envelope fa-fw w3-hover-text-black w3-xlarge w3-margin-right"></i> Email:
+          bookmyshow@gmail.com<br>
+        </div>
+        <p>Swing by for a cup of <i class="fa fa-coffee"></i>, or leave me a note:</p>
+
+        <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+          <div class="w3-half">
+            <input class="w3-input w3-border" type="text" id="name" placeholder="Name" required name="Name">
+          </div>
+          <div class="w3-half">
+            <input class="w3-input w3-border" type="text" id="email" placeholder="Email" required name="Email">
+          </div>
+        </div>
+        <input class="w3-input w3-border" type="text" id="msg" placeholder="Message" required name="Message">
+        <button id="btnSubmit" class="w3-button w3-round w3-right w3-section" style="background-color: maroon; color:
+         mintcream;" type="submit" onclick="ValidateForm()">
+          <i class="fa fa-paper-plane"></i> Email Us</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- The Modal -->
+  <div class="modal" id="alertModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Greetings User !!!</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <!-- Modal body -->
+        <div class="modal-body" id="#txtModal">
+          Mail Sent Successfully. We will reach out to you soon...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
